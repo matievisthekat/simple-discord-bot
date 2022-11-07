@@ -2,7 +2,7 @@ import {config} from 'dotenv';
 config();
 
 import {Client, ClientOptions, Collection, Events, GatewayIntentBits} from 'discord.js';
-import {Sequelize} from 'sequelize';
+import {Sequelize, DataTypes} from 'sequelize';
 import {Command, findCommands} from './commandHandler';
 
 class SimpleBot extends Client {
@@ -11,6 +11,34 @@ class SimpleBot extends Client {
 		dialect: 'sqlite',
 		storage: 'database.sqlite',
 		logging: console.log
+	});
+
+	tickets = this.sql.define('tickets', {
+		user_id: {
+			type: DataTypes.STRING,
+			allowNull: false,
+			unique: true
+		},
+		channel_id: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
+		guild_id: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
+	});
+
+	settings = this.sql.define('settings', {
+		name: {
+			type: DataTypes.STRING,
+			allowNull: false,
+			unique: true,
+		},
+		value: {
+			type: DataTypes.STRING,
+			allowNull: true,
+		}
 	});
 
 	constructor(options: ClientOptions) {
@@ -22,7 +50,12 @@ class SimpleBot extends Client {
 		modules.forEach((mod) => this.commands.set(mod.slash.name, mod));
 		return this.commands;
 	}
+
+	async syncModels() {
+		await this.sql.sync();
+	}
 }
+
 
 const client = new SimpleBot({intents: [GatewayIntentBits.Guilds]});
 
@@ -49,8 +82,11 @@ client.on(Events.InteractionCreate, async (interaction) => {
 	}
 });
 
-client.sql.authenticate().then(() => {
-	client.populateCommands().then(() => {
-		client.login(process.env.TOKEN);
-	});
+client.sql.authenticate().then(async () => {
+	await client.syncModels();
+	await client.populateCommands();
+
+	client.tickets
+
+	await client.login(process.env.TOKEN);
 });

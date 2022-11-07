@@ -5,5 +5,7 @@ declare module 'discord.js' {
   interface Client {
     commands: discord.Collection<string, Command>;
     sql: Sequelize;
+    tickets: ModelCtor<Model<any, any>>;
+    settings: ModelCtor<Model<any, any>>;
   }
 }
