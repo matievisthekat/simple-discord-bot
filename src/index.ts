@@ -2,10 +2,16 @@ import {config} from 'dotenv';
 config();
 
 import {Client, ClientOptions, Collection, Events, GatewayIntentBits} from 'discord.js';
+import {Sequelize} from 'sequelize';
 import {Command, findCommands} from './commandHandler';
 
 class SimpleBot extends Client {
 	commands: Collection<string, Command> = new Collection();
+	sql = new Sequelize({
+		dialect: 'sqlite',
+		storage: 'database.sqlite',
+		logging: console.log
+	});
 
 	constructor(options: ClientOptions) {
 		super(options);
@@ -21,13 +27,13 @@ class SimpleBot extends Client {
 const client = new SimpleBot({intents: [GatewayIntentBits.Guilds]});
 
 client.on(Events.ClientReady, (c) => {
-  console.log(`Logged in as ${c.user.tag}`);
+	console.log(`Logged in as ${c.user.tag}`);
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
 	if (!interaction.isChatInputCommand()) return;
 
-	const command = client.commands.get(interaction.commandName);
+	const command = interaction.client.commands.get(interaction.commandName);
 	if (!command) {
 		console.error(`No command matching ${interaction.commandName} was found`);
 		return;
@@ -43,6 +49,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
 	}
 });
 
-client.populateCommands().then(() => {
-  client.login(process.env.TOKEN);
-})
+client.sql.authenticate().then(() => {
+	client.populateCommands().then(() => {
+		client.login(process.env.TOKEN);
+	});
+});
