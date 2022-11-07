@@ -32,30 +32,33 @@ class SimpleBot extends Client {
 			},
 			channel_id: {
 				type: DataTypes.STRING,
-				allowNull: false,
+				allowNull: false
 			},
 			guild_id: {
 				type: DataTypes.STRING,
-				allowNull: false,
-			},
+				allowNull: false
+			}
 		});
 
 		this.sql.define('settings', {
 			name: {
 				type: DataTypes.STRING,
 				allowNull: false,
-				unique: true,
+				unique: true
 			},
 			value: {
 				type: DataTypes.STRING,
-				allowNull: true,
+				allowNull: true
+			},
+			guild_id: {
+				type: DataTypes.STRING,
+				allowNull: false
 			}
 		});
 
 		await this.sql.sync();
 	}
 }
-
 
 const client = new SimpleBot({intents: [GatewayIntentBits.Guilds]});
 
