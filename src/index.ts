@@ -20,6 +20,10 @@ class SimpleBot extends Client {
 
 const client = new SimpleBot({intents: [GatewayIntentBits.Guilds]});
 
+client.on(Events.ClientReady, (c) => {
+  console.log(`Logged in as ${c.user.tag}`);
+});
+
 client.on(Events.InteractionCreate, async (interaction) => {
 	if (!interaction.isChatInputCommand()) return;
 
@@ -38,3 +42,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 		});
 	}
 });
+
+client.populateCommands().then(() => {
+  client.login(process.env.TOKEN);
+})
