@@ -21,7 +21,7 @@ export default {
 		.setDefaultMemberPermissions(PermissionsBitField.Flags.ManageChannels),
 	async execute(int: ChatInputCommandInteraction) {
 		const name = int.options.getString('category');
-		const chan = int.guild?.channels.cache.find((c) => c.name === name && c.type === ChannelType.GuildCategory);
+		const chan = int.guild?.channels.cache.find((c) => c.name.toLowerCase() === name?.toLowerCase() && c.type === ChannelType.GuildCategory);
 
 		if (!chan) {
 			await int.reply({content: `There isn't a category with the name \`${name}\``});
