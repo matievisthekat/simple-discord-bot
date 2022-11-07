@@ -7,9 +7,9 @@ export default {
   async execute(int: ChatInputCommandInteraction) {
     int.deferReply({ephemeral: true});
 
-    const tickets = int.client.tickets;
+    const tickets = int.client.sql.models.tickets;
 
-    const alreadyCreated = tickets.find({
+    const alreadyCreated = await tickets.findOne({
       where: {
         user_id: int.user.id,
         guild_id: int.guild?.id
@@ -17,7 +17,7 @@ export default {
     });
 
     if (alreadyCreated) {
-      await int.editReply({content: `You already have a ticket! Check <#${alreadyCreated.channel_id}>`})
+      await int.editReply({content: `You already have a ticket! Check <#${alreadyCreated.get('channel_id')}>`})
       return;
     }
   }
