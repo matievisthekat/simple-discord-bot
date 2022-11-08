@@ -18,7 +18,8 @@ export default {
 				.setRequired(true)
 		)
 		.setDescription('Set the category for ticket channels to appear under')
-		.setDefaultMemberPermissions(PermissionsBitField.Flags.ManageChannels),
+		.setDefaultMemberPermissions(PermissionsBitField.Flags.ManageChannels)
+		.setDMPermission(false),
 	async execute(int: ChatInputCommandInteraction) {
 		const name = int.options.getString('category');
 		const chan = int.guild?.channels.cache.find(

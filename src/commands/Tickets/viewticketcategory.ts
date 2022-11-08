@@ -6,7 +6,8 @@ export default {
 	slash: new SlashCommandBuilder()
 		.setName('viewticketcategory')
 		.setDescription('View the current category that ticket channels will appear under')
-		.setDefaultMemberPermissions(PermissionsBitField.Flags.ManageChannels),
+		.setDefaultMemberPermissions(PermissionsBitField.Flags.ManageChannels)
+		.setDMPermission(false),
 	async execute(int: ChatInputCommandInteraction) {
 		if (!int.guild) return;
 		await int.deferReply();
