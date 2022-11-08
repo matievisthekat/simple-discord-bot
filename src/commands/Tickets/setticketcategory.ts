@@ -5,7 +5,7 @@ import {
 	SlashCommandBuilder,
 	SlashCommandStringOption
 } from 'discord.js';
-import {Settings} from '../../types/settings';
+import {SettingsNames} from '../../types/settings';
 
 export default {
 	slash: new SlashCommandBuilder()
@@ -21,32 +21,34 @@ export default {
 		.setDefaultMemberPermissions(PermissionsBitField.Flags.ManageChannels),
 	async execute(int: ChatInputCommandInteraction) {
 		const name = int.options.getString('category');
-		const chan = int.guild?.channels.cache.find((c) => c.name.toLowerCase() === name?.toLowerCase() && c.type === ChannelType.GuildCategory);
+		const chan = int.guild?.channels.cache.find(
+			(c) => c.name.toLowerCase() === name?.toLowerCase() && c.type === ChannelType.GuildCategory
+		);
 
 		if (!chan) {
 			await int.reply({content: `There isn't a category with the name \`${name}\``});
 			return;
 		}
 
-    await int.deferReply();
+		await int.deferReply();
 
 		const alreadyExists = await int.client.sql.models.settings.findOne({
-			where: {name: Settings.TicketCategory, guild_id: int.guild?.id}
+			where: {name: SettingsNames.TicketCategory, guild_id: int.guild?.id}
 		});
 
 		if (alreadyExists) {
 			await int.client.sql.models.settings.update(
 				{value: chan.id},
-				{where: {name: Settings.TicketCategory, guild_id: int.guild?.id}}
+				{where: {name: SettingsNames.TicketCategory, guild_id: int.guild?.id}}
 			);
 		} else {
 			await int.client.sql.models.settings.create({
-				name: Settings.TicketCategory,
+				name: SettingsNames.TicketCategory,
 				value: chan.id,
 				guild_id: int.guild?.id
 			});
 		}
 
-    await int.editReply({content: `Updated your ticket category to \`${chan.name}\``});
+		await int.editReply({content: `Updated your ticket category to \`${chan.name}\``});
 	}
 };
