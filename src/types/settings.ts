@@ -1,3 +1,3 @@
-export enum Settings {
-  TicketCategory = 'settings.tickets.category'
+export enum SettingsNames {
+	TicketCategory = 'settings.tickets.category'
 }
