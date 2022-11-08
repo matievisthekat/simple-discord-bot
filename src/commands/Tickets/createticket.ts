@@ -35,25 +35,7 @@ export default {
 		const channel = await int.guild?.channels.create({
 			name: `ticket-${int.user.username}`,
 			reason: `${int.user.tag} (${int.user.id}) created a ticket`,
-			type: ChannelType.GuildText,
-			permissionOverwrites: [
-				{
-					id: int.guild.id,
-					deny: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages]
-				},
-				{
-					id: int.user.id,
-					allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages]
-				},
-				{
-					id: int.client.user.id,
-					allow: [
-						PermissionFlagsBits.ManageChannels,
-						PermissionFlagsBits.ViewChannel,
-						PermissionFlagsBits.SendMessages
-					]
-				}
-			]
+			type: ChannelType.GuildText
 		});
 
 		if (!channel) {
@@ -70,6 +52,25 @@ export default {
 		if (category) {
 			await channel.setParent(category.value as string);
 		}
+
+		await channel.permissionOverwrites.set([
+			{
+				id: int.guild.id,
+				deny: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages]
+			},
+			{
+				id: int.user.id,
+				allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages]
+			},
+			{
+				id: int.client.user.id,
+				allow: [
+					PermissionFlagsBits.ManageChannels,
+					PermissionFlagsBits.ViewChannel,
+					PermissionFlagsBits.SendMessages
+				]
+			}
+		]);
 
 		await channel.send({content: `${int.member} has opened a ticket!`});
 		await int.editReply({content: `Your ticket has been opened in ${channel}`});
