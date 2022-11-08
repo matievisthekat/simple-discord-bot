@@ -4,6 +4,8 @@ config();
 import {Client, ClientOptions, Collection, Events, GatewayIntentBits} from 'discord.js';
 import {Sequelize, DataTypes} from 'sequelize';
 import {Command, findCommands} from './commandHandler';
+import Tickets from './models/tickets';
+import Settings from './models/settings';
 
 class SimpleBot extends Client {
 	commands: Collection<string, Command> = new Collection();
@@ -24,37 +26,49 @@ class SimpleBot extends Client {
 	}
 
 	async syncModels() {
-		this.sql.define('tickets', {
-			user_id: {
-				type: DataTypes.STRING,
-				allowNull: false,
-				unique: true
+		Tickets.init(
+			{
+				user_id: {
+					type: DataTypes.STRING,
+					allowNull: false,
+					unique: true
+				},
+				channel_id: {
+					type: DataTypes.STRING,
+					allowNull: false
+				},
+				guild_id: {
+					type: DataTypes.STRING,
+					allowNull: false
+				}
 			},
-			channel_id: {
-				type: DataTypes.STRING,
-				allowNull: false
-			},
-			guild_id: {
-				type: DataTypes.STRING,
-				allowNull: false
+			{
+				tableName: 'tickets',
+				sequelize: this.sql
 			}
-		});
+		);
 
-		this.sql.define('settings', {
-			name: {
-				type: DataTypes.STRING,
-				allowNull: false,
-				unique: true
+		Settings.init(
+			{
+				name: {
+					type: DataTypes.STRING,
+					allowNull: false,
+					unique: true
+				},
+				value: {
+					type: DataTypes.STRING,
+					allowNull: true
+				},
+				guild_id: {
+					type: DataTypes.STRING,
+					allowNull: false
+				}
 			},
-			value: {
-				type: DataTypes.STRING,
-				allowNull: true
-			},
-			guild_id: {
-				type: DataTypes.STRING,
-				allowNull: false
+			{
+				tableName: 'settings',
+				sequelize: this.sql
 			}
-		});
+		);
 
 		await this.sql.sync();
 	}
