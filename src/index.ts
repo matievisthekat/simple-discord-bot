@@ -7,7 +7,8 @@ import {Command, findCommands} from './commandHandler';
 import Tickets from './models/tickets';
 import Settings from './models/settings';
 import {createTicket, ticketReasons} from './util/tickets';
-import { TicketReason } from './types/tickets';
+import {TicketReason} from './types/tickets';
+import Warnings from './models/warnings';
 
 class SimpleBot extends Client {
 	commands: Collection<string, Command> = new Collection();
@@ -72,6 +73,36 @@ class SimpleBot extends Client {
 			}
 		);
 
+		Warnings.init(
+			{
+				id: {
+					type: DataTypes.INTEGER,
+					autoIncrement: true,
+					primaryKey: true,
+					defaultValue: 0,
+					allowNull: true
+				},
+				user_id: {
+					type: DataTypes.STRING,
+					allowNull: false,
+					unique: true
+				},
+				moderator_id: {
+					type: DataTypes.STRING,
+					allowNull: false,
+					unique: true
+				},
+				reason: {
+					type: DataTypes.STRING,
+					allowNull: false
+				}
+			},
+			{
+				tableName: 'warnings',
+				sequelize: this.sql
+			}
+		);
+
 		await this.sql.sync();
 	}
 }
@@ -114,7 +145,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
 			createTicket(interaction.user, interaction.guild, interaction)
 				.then(async (channel) => {
-					const reason = ticketReasons[interaction.customId.split('-').pop() as TicketReason || 'support']
+					const reason = ticketReasons[(interaction.customId.split('-').pop() as TicketReason) || 'support'];
 					await channel.setTopic(reason);
 					await channel.send({
 						content: `${interaction.user} opened this ticket because they are: \`${reason}\``
