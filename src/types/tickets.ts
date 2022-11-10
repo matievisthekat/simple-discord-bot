@@ -1,0 +1,1 @@
+export type TicketReason = 'support' | 'claim' | 'donation' | 'report'

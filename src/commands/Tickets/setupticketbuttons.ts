@@ -24,7 +24,7 @@ export default {
 			.setDescription('Click on one of the buttons below to open a ticket!');
 		const row = new ActionRowBuilder<MessageActionRowComponentBuilder>().setComponents(
 			new ButtonBuilder().setCustomId('open-ticket-support').setLabel('Support').setStyle(ButtonStyle.Primary),
-			new ButtonBuilder().setCustomId('open-ticket-donations').setLabel('Donations').setStyle(ButtonStyle.Primary),
+			new ButtonBuilder().setCustomId('open-ticket-donation').setLabel('Donations').setStyle(ButtonStyle.Primary),
 			new ButtonBuilder().setCustomId('open-ticket-claim').setLabel('Claim Rewards').setStyle(ButtonStyle.Primary),
 			new ButtonBuilder().setCustomId('open-ticket-report').setLabel('Report User').setStyle(ButtonStyle.Primary)
 		);
