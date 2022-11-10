@@ -79,22 +79,23 @@ class SimpleBot extends Client {
 					type: DataTypes.INTEGER,
 					autoIncrement: true,
 					primaryKey: true,
-					defaultValue: 0,
-					allowNull: true
+					unique: true,
+					allowNull: false
 				},
 				user_id: {
 					type: DataTypes.STRING,
 					allowNull: false,
-					unique: true
+					unique: false
 				},
 				moderator_id: {
 					type: DataTypes.STRING,
 					allowNull: false,
-					unique: true
+					unique: false
 				},
 				reason: {
 					type: DataTypes.STRING,
-					allowNull: false
+					allowNull: false,
+					unique: false
 				}
 			},
 			{
