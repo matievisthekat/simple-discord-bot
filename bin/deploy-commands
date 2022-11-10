@@ -9,7 +9,8 @@ findCommands('/').then(async (commands) => {
   const rest = new REST({version: '10'}).setToken(process.env.TOKEN);
 
   try {
-    console.log(`Refreshing ${commands.length} application commands`);
+    console.log(`Refreshing ${commands.length} application commands:`);
+    console.log(commands.map((c, i) => ` - ${i+1}: ${c.slash.name}`).join('\n'));
 
     const data = await rest.put(Routes.applicationCommands(process.env.CLIENT_ID), {body: commands.map(c => c.slash.toJSON())});
 
