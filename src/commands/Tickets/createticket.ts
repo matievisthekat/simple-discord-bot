@@ -2,6 +2,7 @@ import {ChannelType, ChatInputCommandInteraction, PermissionFlagsBits, SlashComm
 import Settings from '../../models/settings';
 import Tickets from '../../models/tickets';
 import {SettingsNames} from '../../types/settings';
+import {createTicket} from '../../util/tickets';
 
 export default {
 	slash: new SlashCommandBuilder()
@@ -25,54 +26,13 @@ export default {
 			return;
 		}
 
-		const category = await Settings.findOne({
-			where: {
-				name: SettingsNames.TicketCategory,
-				guild_id: int.guild.id
-			}
-		});
-
-		const channel = await int.guild?.channels.create({
-			name: `ticket-${int.user.username}`,
-			reason: `${int.user.tag} (${int.user.id}) created a ticket`,
-			type: ChannelType.GuildText
-		});
-
-		if (!channel) {
-			await int.editReply({content: 'Failed to create channel'});
-			return;
-		}
-
-		await Tickets.create({
-			user_id: int.user.id,
-			channel_id: channel.id,
-			guild_id: int.guild.id
-		});
-
-		if (category) {
-			await channel.setParent(category.value as string);
-		}
-
-		await channel.permissionOverwrites.set([
-			{
-				id: int.guild.id,
-				deny: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages]
-			},
-			{
-				id: int.user.id,
-				allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages]
-			},
-			{
-				id: int.client.user.id,
-				allow: [
-					PermissionFlagsBits.ManageChannels,
-					PermissionFlagsBits.ViewChannel,
-					PermissionFlagsBits.SendMessages
-				]
-			}
-		]);
-
-		await channel.send({content: `${int.member} has opened a ticket!`});
-		await int.editReply({content: `Your ticket has been opened in ${channel}`});
+		createTicket(int.user, int.guild, int)
+			.then(async (channel) => {
+				await channel.send({content: `${int.user} has opened a ticket!`});
+				await int.editReply({content: `Your ticket has been opened in ${channel}`});
+			})
+			.catch(async () => {
+				await int.editReply({content: 'Failed to create ticket'});
+			});
 	}
 };
