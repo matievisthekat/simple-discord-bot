@@ -1,7 +1,14 @@
-import {ChannelType, Client, Guild, Interaction, PermissionFlagsBits, TextChannel, User} from 'discord.js';
+import {ChannelType, Guild, Interaction, PermissionFlagsBits, TextChannel, User} from 'discord.js';
 import Settings from '../models/settings';
 import Tickets from '../models/tickets';
 import {SettingsNames} from '../types/settings';
+
+export const ticketReasons = {
+	report: 'Reporting a user',
+	claim: 'Claiming a reward',
+	support: 'Requesting support',
+	donation: 'Making a donation',
+};
 
 export async function createTicket(user: User, guild: Guild, int: Interaction): Promise<TextChannel> {
 	return new Promise(async (resolve, reject) => {

@@ -6,7 +6,8 @@ import {Sequelize, DataTypes} from 'sequelize';
 import {Command, findCommands} from './commandHandler';
 import Tickets from './models/tickets';
 import Settings from './models/settings';
-import {createTicket} from './util/tickets';
+import {createTicket, ticketReasons} from './util/tickets';
+import { TicketReason } from './types/tickets';
 
 class SimpleBot extends Client {
 	commands: Collection<string, Command> = new Collection();
@@ -113,10 +114,10 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
 			createTicket(interaction.user, interaction.guild, interaction)
 				.then(async (channel) => {
+					const reason = ticketReasons[interaction.customId.split('-').pop() as TicketReason || 'support']
+					await channel.setTopic(reason);
 					await channel.send({
-						content: `${interaction.user} opened this ticket regarding \`${interaction.customId
-							.split('-')
-							.pop()}\``
+						content: `${interaction.user} opened this ticket because they are: \`${reason}\``
 					});
 					await interaction.editReply({content: `Your ticket has been openened: ${channel}`});
 				})
