@@ -9,6 +9,7 @@ import Settings from './models/settings';
 import {createTicket, ticketReasons} from './util/tickets';
 import {TicketReason} from './types/tickets';
 import Warnings from './models/warnings';
+import Bank from './models/bank';
 
 class SimpleBot extends Client {
 	commands: Collection<string, Command> = new Collection();
@@ -100,6 +101,25 @@ class SimpleBot extends Client {
 			},
 			{
 				tableName: 'warnings',
+				sequelize: this.sql
+			}
+		);
+
+		Bank.init(
+			{
+				user_id: {
+					type: DataTypes.STRING,
+					allowNull: false,
+					unique: true
+				},
+				balance: {
+					type: DataTypes.FLOAT,
+					allowNull: false,
+					defaultValue: 0
+				}
+			},
+			{
+				tableName: 'bank',
 				sequelize: this.sql
 			}
 		);
