@@ -35,7 +35,7 @@ export default {
 
 		if (!bal || item.price > bal.balance) {
 			await int.reply({
-				content: `You don't have enough money! you need \`$${(item.price - (bal?.balance || 0)).toFixed(2)}\``
+				content: `You don't have enough money! you need ${(item.price - (bal?.balance || 0)).toFixed(2)}:cherries:`
 			});
 			return;
 		}
@@ -46,6 +46,6 @@ export default {
 		await member.roles.add(item.role_id);
 		await bal.decrement('balance', {by: item.price});
 
-		await int.editReply({content: `You have bought **${role.name}** for \`$${item.price.toFixed(2)}\``});
+		await int.editReply({content: `You have bought **${role.name}** for ${item.price.toFixed(2)}:cherries:`});
 	}
 };

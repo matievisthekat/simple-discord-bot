@@ -21,6 +21,6 @@ export default {
 		});
 		const bal = bank?.balance?.toFixed(2) ?? (0.00).toFixed(2);
 
-    await int.reply({content: `${target === int.user ? `You have` : `${target} has`} \`$${bal}\` in the bank`})
+    await int.reply({content: `${target === int.user ? `You have` : `${target} has`} ${bal}:cherries: in the bank`})
 	}
 };

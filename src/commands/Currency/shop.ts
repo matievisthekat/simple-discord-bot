@@ -23,7 +23,7 @@ export default {
 				items.map((i) => {
 					return {
 						name: `#${i.id}`,
-						value: `<@&${i.role_id}>: \`$${i.price.toFixed(2)}\``
+						value: `<@&${i.role_id}>: ${i.price.toFixed(2)}:cherries:`
 					};
 				})
 			);

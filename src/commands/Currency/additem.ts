@@ -36,6 +36,6 @@ export default {
 			price
 		});
 
-		await int.reply({content: `I have added **${role.name}** to the shop for \`$${price.toFixed(2)}\``});
+		await int.reply({content: `I have added **${role.name}** to the shop for ${price.toFixed(2)}:cherries:`});
 	}
 };
