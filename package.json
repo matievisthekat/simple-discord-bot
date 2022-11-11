@@ -10,8 +10,7 @@
     "dotenv": "^16.0.3",
     "sequelize": "^6.25.4",
     "sqlite3": "^5.1.2",
-    "utf-8-validate": "^5.0.10",
-    "zlib-sync": "^0.1.7"
+    "utf-8-validate": "^5.0.10"
   },
   "devDependencies": {
     "@types/node": "^18.11.9",
