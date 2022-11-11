@@ -18,6 +18,6 @@ export default {
 
 		await bank.increment('balance', {by: amt});
 
-		await int.reply({content: `You worked and earned \`$${amt}\``});
+		await int.reply({content: `You worked and earned \`$${amt.toFixed(2)}\``});
 	}
 };
