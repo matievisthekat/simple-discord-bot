@@ -171,9 +171,14 @@ client.on(Events.InteractionCreate, async (interaction) => {
 			await command.execute(interaction);
 		} catch (err) {
 			console.error(err);
-			await interaction.reply({
+			const msg = {
 				content: `There was an error executing that command. See below:\n\`\`\`${err}\`\`\``
-			});
+			};
+			if (interaction.replied || interaction.deferred) {
+				await interaction.editReply(msg);
+			} else {
+				await interaction.reply(msg);
+			}
 		}
 	} else if (interaction.isButton()) {
 		if (interaction.customId.startsWith('open-ticket')) {
