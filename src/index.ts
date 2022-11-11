@@ -10,7 +10,7 @@ import {createTicket, ticketReasons} from './util/tickets';
 import {TicketReason} from './types/tickets';
 import Warnings from './models/warnings';
 import Bank from './models/bank';
-import Shop from './models/shop';
+import ShopItems from './models/shopitems';
 
 class SimpleBot extends Client {
 	commands: Collection<string, Command> = new Collection();
@@ -125,7 +125,7 @@ class SimpleBot extends Client {
 			}
 		);
 
-		Shop.init(
+		ShopItems.init(
 			{
 				id: {
 					type: DataTypes.INTEGER,
@@ -136,8 +136,7 @@ class SimpleBot extends Client {
 				},
 				guild_id: {
 					type: DataTypes.STRING,
-					allowNull: false,
-					unique: true
+					allowNull: false
 				},
 				role_id: {
 					type: DataTypes.STRING,
@@ -149,7 +148,7 @@ class SimpleBot extends Client {
 				}
 			},
 			{
-				tableName: 'shop',
+				tableName: 'shop_items',
 				sequelize: this.sql
 			}
 		);
