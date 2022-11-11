@@ -127,6 +127,13 @@ class SimpleBot extends Client {
 
 		Shop.init(
 			{
+				id: {
+					type: DataTypes.INTEGER,
+					autoIncrement: true,
+					primaryKey: true,
+					unique: true,
+					allowNull: false
+				},
 				guild_id: {
 					type: DataTypes.STRING,
 					allowNull: false,
